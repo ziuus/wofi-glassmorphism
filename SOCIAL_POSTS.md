@@ -232,6 +232,6 @@ Not just a rice screenshot — the installer, CI, and CSS architecture are the i
 - [ ] Reddit r/hyprland
 - [ ] Reddit r/linux
 - [ ] Reddit r/archlinux
-- [ ] LinkedIn post
+- [ ] ~~LinkedIn post~~ (skipped)
 - [ ] Discord communities
 - [ ] Lobsters submission

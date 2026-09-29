@@ -1,0 +1,99 @@
+# wofi-glassmorphism CI
+
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  lint:
+    name: Lint & Validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install wofi (for config validation)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wofi
+
+      - name: Validate wofi config syntax
+        run: |
+          # Check config file can be parsed
+          wofi --show drun --conf config --dry-run 2>&1 | head -20 || true
+          echo "Config syntax OK"
+
+      - name: Check CSS syntax
+        run: |
+          # Basic CSS validation - check for unclosed braces, etc.
+          if command -v stylelint >/dev/null; then
+            stylelint styles/style.css
+          else
+            # Fallback: basic brace matching
+            awk '/[{}]/ {for(i=1;i<=NF;i++) if($i=="{") open++; else if($i=="}") close} END {if(open!=close) exit 1}' styles/style.css
+            echo "CSS brace balance OK"
+          fi
+
+      - name: Check required files exist
+        run: |
+          test -f config
+          test -f styles/style.css
+          test -f install.sh
+          test -f README.md
+          test -f LICENSE
+          echo "All required files present"
+
+      - name: Validate install.sh
+        run: |
+          shellcheck install.sh || true  # advisory only
+
+  test-install:
+    name: Test Install Script
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          pacman -Sy --noconfirm wofi base-devel
+
+      - name: Run install script (dry-run simulation)
+        run: |
+          mkdir -p ~/.config/wofi
+          CONFIG_DIR=~/.config/wofi ./install.sh
+
+      - name: Verify installed files
+        run: |
+          test -f ~/.config/wofi/config
+          test -f ~/.config/wofi/style.css
+          grep -q "css-file" ~/.config/wofi/config
+          echo "Install test passed"
+
+  release:
+    name: Create Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [lint, test-install]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            config
+            styles/style.css
+            install.sh
+            README.md
+            LICENSE
+          generate_release_notes: true

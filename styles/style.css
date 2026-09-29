@@ -1,0 +1,240 @@
+/*
+ * wofi glass morphic style.css
+ * Place at ~/.config/wofi/style.css
+ * Requires compositor with backdrop-blur support (hyprland, swayfx, picom, etc.)
+ */
+
+/* Root variables for easy theming */
+:root {
+  /* Glass base */
+  --glass-bg: rgba(15, 15, 20, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 0.06);
+  --glass-shadow: rgba(0, 0, 0, 0.45);
+
+  /* Accent (customize to your theme) */
+  --accent: #89b4fa;
+  --accent-hover: #74c7ec;
+  --accent-dim: rgba(137, 180, 250, 0.18);
+
+  /* Text */
+  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-muted: rgba(255, 255, 255, 0.35);
+  --text-on-accent: #1e1e2e;
+
+  /* Spacing */
+  --radius-lg: 16px;
+  --radius-md: 10px;
+  --radius-sm: 8px;
+  --spacing: 4px;
+  --item-padding: 12px 16px;
+  --input-padding: 12px 16px;
+}
+
+/* Main window */
+window {
+  background-color: transparent;
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 0 0 1px var(--glass-border),
+    0 8px 32px var(--glass-shadow),
+    inset 0 1px 0 var(--glass-highlight);
+}
+
+/* The inner box that holds everything */
+#outer-box {
+  background-color: var(--glass-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  /* Backdrop blur handled by compositor on window level */
+}
+
+/* Input field */
+#input {
+  background-color: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: var(--input-padding);
+  color: var(--text-primary);
+  font-family: "JetBrains Mono", "Fira Code", "Noto Sans", sans-serif;
+  font-size: 11pt;
+  font-weight: 500;
+  margin: 8px;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+#input:focus {
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 2px var(--accent-dim),
+    inset 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+#input placeholder {
+  color: var(--text-muted);
+}
+
+/* Prompt text (the ⌘ or "Search...") */
+#prompt {
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-right: 10px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* Entry box (each item row) */
+#entry-box {
+  padding: var(--spacing) 8px;
+}
+
+#entry {
+  border-radius: var(--radius-md);
+  padding: var(--item-padding);
+  transition: background-color 120ms ease, color 120ms ease, transform 80ms ease;
+  outline: none;
+}
+
+#entry:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+#entry:selected {
+  background-color: var(--accent-dim);
+  color: var(--text-primary);
+  box-shadow:
+    inset 0 0 0 1px rgba(137, 180, 250, 0.3),
+    0 2px 12px rgba(137, 180, 250, 0.15);
+}
+
+/* Selected item text */
+#entry:selected #text,
+#entry:selected #name,
+#entry:selected #description {
+  color: var(--text-primary);
+}
+
+/* Hover item text */
+#entry:hover #text,
+#entry:hover #name,
+#entry:hover #description {
+  color: var(--text-primary);
+}
+
+/* Icon styling */
+#icon {
+  margin-right: 12px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+#entry:selected #icon {
+  filter:
+    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))
+    drop-shadow(0 0 8px var(--accent));
+}
+
+/* Text elements */
+#text,
+#name,
+#description {
+  font-family: "JetBrains Mono", "Fira Code", "Noto Sans", sans-serif;
+  font-size: 11pt;
+  color: var(--text-primary);
+}
+
+#name {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+#description {
+  color: var(--text-secondary);
+  font-weight: 400;
+  font-size: 10pt;
+  margin-left: 4px;
+}
+
+/* Scrollbar (if many items) */
+scrollbar {
+  background-color: transparent;
+}
+
+scrollbar slider {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  min-width: 6px;
+  margin: 4px;
+}
+
+scrollbar slider:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+scrollbar slider:active {
+  background-color: var(--accent);
+}
+
+/* Separator (if using categories) */
+#separator {
+  background-color: var(--glass-border);
+  margin: 4px 16px;
+  border-radius: 1px;
+}
+
+/* No matches message */
+#no-matches {
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 16px;
+  text-align: center;
+}
+
+/* Subtle animation for entry appearance */
+@keyframes fade-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#entry {
+  animation: fade-slide-in 120ms ease-out backwards;
+}
+
+/* Staggered animation delay via nth-child would need JS, keeping simple */
+
+/* High contrast mode override (respects GTK) */
+@media (prefers-contrast: high) {
+  :root {
+    --glass-bg: rgba(0, 0, 0, 0.9);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --text-secondary: rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  #entry,
+  #input,
+  #icon {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Print styles (unlikely needed but clean) */
+@media print {
+  window {
+    background: white;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  #entry:selected {
+    background: #e3f2fd;
+    color: #0d47a1;
+  }
+}

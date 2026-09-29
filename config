@@ -1,0 +1,72 @@
+# wofi glass morphic launcher config
+# ~/.config/wofi/config
+
+# Display mode: drun (applications), run (commands), window (windows)
+mode=drun
+
+# Position: center, top, bottom, left, right
+# width and height as percentage or pixels
+width=50%
+height=40%
+location=center
+anchor=center
+
+# Visual
+border-radius=16px
+border-width=1px
+border-color=rgba(255, 255, 255, 0.12)
+background-color=rgba(15, 15, 20, 0.72)
+background-image=linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)
+
+# Blur (requires compositor like hyprland, swayfx, or picom with blur)
+# Note: wofi itself doesn't blur; the compositor handles window backdrop blur
+# Enable blur in your compositor config for the wofi window class
+
+# Fonts
+font=JetBrains Mono Medium 11
+# fallback: font=Noto Sans 11
+
+# Text colors
+text-color=rgba(255, 255, 255, 0.92)
+selected-text-color=#ffffff
+
+# Item styling
+item-padding=12px 16px
+item-spacing=4px
+item-border-radius=10px
+item-selected-background-color=rgba(255, 255, 255, 0.14)
+item-selected-text-color=#ffffff
+item-hover-background-color=rgba(255, 255, 255, 0.08)
+
+# Icons
+icon-size=24
+icon-theme=Papirus-Dark
+show-icons=true
+
+# Input/prompt
+prompt=⌘
+prompt-color=rgba(255, 255, 255, 0.6)
+input-padding=12px 16px
+input-border-radius=10px
+input-background-color=rgba(0, 0, 0, 0.35)
+input-text-color=rgba(255, 255, 255, 0.95)
+input-placeholder-color=rgba(255, 255, 255, 0.35)
+input-border-width=1px
+input-border-color=rgba(255, 255, 255, 0.08)
+
+# Matching
+matching=fuzzy
+case-sensitive=false
+sort-order=default
+
+# Behavior
+allow-images=true
+allow-markup=true
+gtk-dark=true
+
+# Window
+window-class=wofi-launcher
+window-title=wofi-launcher
+
+# Advanced: custom CSS file (overrides above)
+# css-file=~/.config/wofi/style.css
